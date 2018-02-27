@@ -6,6 +6,10 @@ The aim of this coursework is to implement the Value Iteration algorithm to comp
 
 ![alt text](https://raw.githubusercontent.com/edjeffery/Reinforcement_Learning_CW1/master/value_iteration_pseudocode.png)
 Image taken from "Reinforcement Learning" by Sutton & Barto (1998)
+
+Every exercise uses a variant of the gridworld shown below.
+
+![alt text](https://raw.githubusercontent.com/edjeffery/Reinforcement_Learning_CW1/master/gridworld.png)
  
 ## Exercise 1
 
