@@ -27,54 +27,47 @@ class Gridworld:
         self.rewards[self.gold_positions] = 10
 
         # Specify available actions
-        self.actions = ["UP", "RIGHT", "DOWN", "LEFT"]
+        self.actions = ["n", "e", "s", "w"]
 
     def get_available_actions(self):
         return self.actions
 
-    def make_step(self, action):
+    def make_step(self, current_state, action):
 
-        if random.random() < 0.2:
-            i = np.random.randint(0, 4)
-            action = self.actions[i]
+        #if random.random() < 0.2:
+        #    i = np.random.randint(0, 4)
+        #    action = self.actions[i]
 
-        old_position = self.agent_position
-        new_position = self.agent_position
+        #old_position = self.agent_position
+        new_state = current_state
 
         # Update new_position based on the chosen action and check whether agent hits a wall.
-        if action == "UP":
-            candidate_position = self.agent_position + self.num_cols
-            if candidate_position < self.num_cells:
-                new_position = candidate_position
-        elif action == "RIGHT":
-            candidate_position = self.agent_position + 1
-            if candidate_position % self.num_cols > 0:
-                new_position = candidate_position
-        elif action == "DOWN":
-            candidate_position = self.agent_position - self.num_cols
-            if candidate_position >= 0:
-                new_position = candidate_position
-        elif action == "LEFT":
-            candidate_position = self.agent_position - 1
-            if candidate_position % self.num_cols < self.num_cols - 1:
-                new_position = candidate_position
+        if action == "n":
+            temp_state = current_state + self.num_cols
+            if temp_state < self.num_cells:
+                new_state = temp_state
+        elif action == "e":
+            temp_state = current_state + 1
+            if temp_state % self.num_cols > 0:
+                new_state = temp_state
+        elif action == "s":
+            temp_state = current_state - self.num_cols
+            if temp_state >= 0:
+                new_state = temp_state
+        elif action == "w":
+            temp_state = current_state - 1
+            if temp_state % self.num_cols < self.num_cols - 1:
+                new_state = temp_state
         else:
             raise ValueError('Action was mis-specified!')
 
-        # Update the position of the agent.
-        self.agent_position = new_position
-
         # Get reward
-        reward = self.rewards[new_position]
-
-        # Deduct 1 from reward if agent moved
-        # if old_position != new_position:
-        # reward -= 1
+        reward = self.rewards[new_state]
 
         # Deduct 1 from reward for every attempted move
         reward -= 1
 
-        return reward
+        return (new_state, reward)
 
     def is_terminal(self, state):
         if state in self.terminal_states:
