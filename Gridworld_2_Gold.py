@@ -1,14 +1,26 @@
 import numpy as np
-import random
-#% matplotlib inline
 
 
 class Gridworld:
-    '''
+    ''' Defines the properties and functionality of the Gridworld
+
+    Attributes:
+        num_rows (int): Number of rows
+        num_cols (int): Number of columns
+        num_dimensions (int): Number of variations of gridworld that can occur (i.e. 2 gold, 1st taken & 2nd remaining or 1st remaining and 2nd left)
+        num_cells (int): Number of cells in Gridworld
+        num_states (int): Number of possible states in Gridworld (dimension factor of num_cells)
+        bomb_positions (np.array): State locations of bombs
+        gold_positions (np.array): State locations of gold
+        terminal_gold_positions (np.array): State locations of gold pieces that are also terminal states
+        terminal_states (np.array): State locations of terminal states
+        rewards (np.array): Reward from being in a given state
+        actions (list): Available actions from any given state
 
     '''
 
     def __init__(self):
+        """Sets up Gridworld"""
         self.num_rows = 5
         self.num_cols = 5
         self.num_dimensions = 3
@@ -30,16 +42,16 @@ class Gridworld:
         self.actions = ["n", "e", "s", "w"]
 
     def get_available_actions(self):
+        """ Returns available actions in any given state """
         return self.actions
 
     def make_step(self, current_state, action):
+        """ Computes the new state and reward for being in that new state """
 
         if current_state == 12:
             current_state = current_state + 50
-            dimension = 3
         elif current_state == 23:
             current_state = current_state + 25
-            dimension = 2
 
         new_state = current_state
 
@@ -81,19 +93,8 @@ class Gridworld:
         return (new_state, reward)
 
     def is_terminal(self, state):
+        """Checks if a state is terminal or not"""
         if state in self.terminal_states:
             return True
         else:
             return False
-
-    def choose_random_action(self, available_actions):
-        number_of_actions = len(available_actions)
-        random_index = np.random.randint(0, number_of_actions)
-        action = available_actions[random_index]
-        return action
-
-    def get_bomb_location(self):
-        return self.bomb_positions
-
-    def get_gold_location(self):
-        return self.gold_positions

@@ -1,8 +1,8 @@
 import numpy as np
 from Gridworld_2_Gold import Gridworld
 policy = np.array(["n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e"])
-#policy = np.array(75)
-# Please write your code for Exercise 1 here. We will mark your coursework by checking
+
+# Please write your code for Exercise 3 here. We will mark your coursework by checking
 # the values of the variables policy and v in this cell. Your code should compute the
 # values of policy and v from scratch when this cell is executed, using the value
 # iteration algorithm.
@@ -16,10 +16,8 @@ env = Gridworld()
 v = np.zeros(env.num_states)
 actions = env.get_available_actions()
 
-print("Terminal states are: " + str(env.terminal_states))
-
 # Set up the lookup table that stores a list of tuples containing probability, next state and reward for every state-action pair
-lookup_table = np.zeros((env.num_states,4), dtype=np.ndarray)
+lookup_table = np.zeros((env.num_states, 4), dtype=np.ndarray)
 for state in range(env.num_states):
     for action in actions:
         list = []
@@ -33,8 +31,6 @@ for state in range(env.num_states):
         lookup_table[state][actions.index(action)] = list
         #print(state, action, lookup_table[state][actions.index(action)])
 
-#print(lookup_table)
-
 
 # Computes one-step look ahead from a state to get the action-values of performing each action
 def look_ahead(s, v):
@@ -46,36 +42,24 @@ def look_ahead(s, v):
     return action_values
 
 # Iterates until the change between old and new V(s) values is sufficiently small
-iteration = 1
 while True:
     delta = 0
-    #print("\n Iteration " + str(iteration) + "\n")
     for state in range(env.num_states):
-        #print("Looping through states")
         if not env.is_terminal(state):
-            #print(str(state) + " is not terminal")
             action_values = look_ahead(state, v)
             best_action_value = np.max(action_values)
             best_action = actions[np.argmax(action_values)]
             delta = max(delta, np.abs(best_action_value - v[state]))
-            #print("State: " + str(state) + "\tAction values: " + str(action_values) + "\tV(s): " + str(
-            #    v[state]) + "\tBest action value: " + str(best_action_value) + "\tDelta: " + str(delta))
             v[state] = best_action_value
             policy[state] = best_action
-            #print(delta)
-            #print(np.flipud(v[:25].reshape((5, 5))))
-    #print(delta)
     #print(np.flipud(v[:25].reshape((5,5))))
-    #print(np.flipud(v[25:50].reshape((5, 5))))
-    #print(np.flipud(v[50:].reshape((5, 5))))
     if delta < theta:
         break
-    iteration += 1
 
 # Print out the state-values
 print(v[:25])
 # Print out the optimal policy
 print(policy[:25])
 
-for i in range(25):
+for i in range(30):
     print("State:", i, "\tValue:", v[i], "\tPolicy:", policy[i])
