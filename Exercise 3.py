@@ -1,5 +1,5 @@
 import numpy as np
-from Gridworld import Gridworld
+from Gridworld_2_Gold import Gridworld
 policy = np.array(["n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "s", "w", "e"])
 
 # Please write your code for Exercise 1 here. We will mark your coursework by checking
@@ -10,7 +10,7 @@ policy = np.array(["n", "w", "s", "w", "e", "n", "w", "s", "w", "e", "n", "w", "
 theta = 1e-10
 gamma = 1
 epsilon = 0
-alpha = 0.2
+alpha = 0
 
 env = Gridworld()
 v = np.zeros(25)
