@@ -11,18 +11,18 @@ class Gridworld:
     def __init__(self):
         self.num_rows = 5
         self.num_cols = 5
-        self.num_cells = self.num_cols * self.num_rows
+        self.num_dimensions = 3
+        self.num_cells = self.num_cols * self.num_rows                          #25
+        self.num_states = self.num_cols * self.num_rows * self.num_dimensions   #75
 
-        # Choose starting position of the agent randomly among the first 5 cells
-        self.agent_position = np.random.randint(0, 5)
-
-        # Choose position of the gold and bomb
-        self.bomb_positions = np.array([18])
-        self.gold_positions = np.array([23])
-        self.terminal_states = np.array([self.bomb_positions, self.gold_positions])
+        # Choose positions of the gold and bomb in each dimension
+        self.bomb_positions = np.array([18, 43, 68])
+        self.gold_positions = np.array([12, 23, 37, 73])
+        self.terminal_gold_positions = np.array([37, 73])
+        self.terminal_states = np.concatenate([self.bomb_positions, self.terminal_gold_positions])
 
         # Specify rewards
-        self.rewards = np.zeros(self.num_cells)
+        self.rewards = np.zeros(self.num_states)
         self.rewards[self.bomb_positions] = -10
         self.rewards[self.gold_positions] = 10
 
@@ -34,17 +34,28 @@ class Gridworld:
 
     def make_step(self, current_state, action):
 
-        #if random.random() < 0.2:
-        #    i = np.random.randint(0, 4)
-        #    action = self.actions[i]
+        if current_state == 12:
+            current_state = current_state + 50
+            dimension = 3
+        elif current_state == 23:
+            current_state = current_state + 25
+            dimension = 2
 
-        #old_position = self.agent_position
         new_state = current_state
+
+        if 0 <= current_state < 25:
+            dimension = 1
+        elif 25 <= current_state < 50:
+            dimension = 2
+        elif 50 <= current_state < 75:
+            dimension = 3
+        else:
+            print("Error in dimension")
 
         # Update new_position based on the chosen action and check whether agent hits a wall.
         if action == "n":
             temp_state = current_state + self.num_cols
-            if temp_state < self.num_cells:
+            if temp_state < self.num_cells * dimension:
                 new_state = temp_state
         elif action == "e":
             temp_state = current_state + 1
@@ -52,7 +63,7 @@ class Gridworld:
                 new_state = temp_state
         elif action == "s":
             temp_state = current_state - self.num_cols
-            if temp_state >= 0:
+            if temp_state >= 0 + (25 * (dimension - 1)):
                 new_state = temp_state
         elif action == "w":
             temp_state = current_state - 1
